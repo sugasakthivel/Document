@@ -1,0 +1,15 @@
+{% extends 'Index.html' %}
+
+{% block content %}
+<div class="row align-items-center" style="min-height: 100vh; min-width: 100%;">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold" style="color: white;">Secure File Sharing</h1>
+        <p class="lead" style="color: white;">Share files with time-limited, secure download links. Full control over accessibility and privacy.</p>
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-2" style="color: white;">Get Started</a>
+            <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

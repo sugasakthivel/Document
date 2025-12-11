@@ -1,0 +1,61 @@
+{% extends 'Index.html' %}
+
+{% block content %}
+<div class="row justify-content-start">
+    <div class="col-md-8">
+        <div class="card shadow mb-4 bg-transparent">
+            <div class="card-body text-white">
+                <h2 class="card-title">{{ file.original_filename }}</h2>
+                <p class="text-muted">{{ file.description }}</p>
+                
+                <div class="row mt-3 text-white">
+                    <div class="col-md-6">
+                        <p><strong>Created:</strong> {{ file.created_at|date:"Y-m-d H:i" }}</p>
+                        <p><strong>Expires:</strong> {{ file.expires_at|date:"Y-m-d H:i" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Downloads:</strong> {{ file.download_count }}</p>
+                        <p><strong>Status:</strong> 
+                            {% if file.is_expired %}
+                                <span class="badge bg-info">Expired</span>
+                            {% else %}
+                                <span class="badge bg-info">Active</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label class="form-label">Download URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ download_url }}" id="downloadUrl" readonly>
+                        <button class="btn btn-primary" onclick="copyUrl()">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'toggle_file_status' file.token %}" class="btn btn-info">
+                        {% if file.is_active %}Deactivate{% else %}Activate{% endif %}
+                    </a>
+                    <a href="{% url 'delete_file' file.token %}" class="btn btn-info">Delete</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-info">Back</a>
+                </div>
+            </div>
+        </div>
+
+        
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function copyUrl() {
+        var copyText = document.getElementById("downloadUrl");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand("copy");
+        alert("Download URL copied to clipboard!");
+    }
+</script>
+{% endblock %}

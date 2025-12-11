@@ -1,0 +1,94 @@
+{% extends 'Index.html' %}
+
+{% block content %}
+<h2 class="mb-4 text-white">Dashboard</h2>
+
+<div class="row mb-2">
+    <div class="col-md-3">
+        <div class="card bg-transparent text-white">
+            <div class="card-body">
+                <h5>Total Files</h5>
+                <h2>{{ stats.total_files }}</h2>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="col-md-3">
+        <div class="card bg-transparent text-white">
+            <div class="card-body">
+                <h5>Active Files</h5>
+                <h2>{{ stats.active_files }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5 mt-5 ">
+    <div class="col-md-3">
+        <div class="card bg-transparent text-white">
+            <div class="card-body">
+                <h5>Expired Files</h5>
+                <h2>{{ stats.expired_files }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-transparent text-white">
+            <div class="card-body">
+                <h5>Total Downloads</h5>
+                <h2>{{ stats.total_downloads }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-3  text-white">
+    <h3>Your Files</h3>
+    <a href="{% url 'upload_file' %}" class="btn btn-primary">
+        <i class="bi bi-upload"></i> Upload New File
+    </a>
+</div>
+
+<div class="table-responsive text-white">
+    <table class="table table-striped table-dark">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Created</th>
+                <th>Expires</th>
+                <th>Downloads</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.original_filename }}</td>
+                <td>{{ file.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ file.expires_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ file.download_count }}</td>
+                <td>
+                    {% if file.is_expired %}
+                        <span class="badge bg-danger">Expired</span>
+                    {% else %}
+                        <span class="badge bg-success">Active</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'file_detail' file.token %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a href="{% url 'delete_file' file.token %}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No files uploaded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
