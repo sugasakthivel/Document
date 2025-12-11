@@ -1,0 +1,1 @@
+web: gunicorn doc_file.wsgi:application
